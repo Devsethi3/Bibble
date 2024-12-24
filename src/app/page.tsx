@@ -19,13 +19,10 @@ import {
   Lock,
   Globe,
   MessageSquare,
-  Heart,
-  Brush,
-  Code,
-  Calendar,
-  FileText,
 } from "lucide-react";
 import Link from "next/link";
+import { AiFillAliwangwang } from "react-icons/ai";
+import { GiClover } from "react-icons/gi";
 
 const DecorativeShape = ({
   className,
@@ -117,9 +114,9 @@ export default function Home() {
       <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <Sparkles className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 text-primary" />
+            <GiClover className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 text-primary" />
             <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
-              Innovate Hub
+              Bibble
             </span>
           </div>
 

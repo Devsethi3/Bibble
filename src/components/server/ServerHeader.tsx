@@ -30,15 +30,13 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
   const isAdmin = role === MemberRole.ADMIN;
   const isModerator = isAdmin || role === MemberRole.MODERATOR;
 
-  const router = useRouter();
-
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger className="focus:outline-none" asChild>
           <button className="w-full font-medium px-3 flex items-center h-12 border-b">
             {server.name}
-            <ChevronDown className="h-5 w-5 ml-auto" />
+            <ChevronDown className="h-5 w-5 ml-auto md:block hidden" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 text-xs font-medium space-y-[2px]">

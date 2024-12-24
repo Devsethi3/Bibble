@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { JSX } from "react";
 import Footer from "@/components/Footer";
 import PricingSection from "@/components/PricingSection";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -26,16 +26,20 @@ import {
   FileText,
 } from "lucide-react";
 import Link from "next/link";
+
 const DecorativeShape = ({
   className,
   type = "circle",
   delay = "0",
 }: {
   className: string;
-  type?: string;
+  type?: "circle" | "hexagon" | "triangle" | "star";
   delay?: string;
 }) => {
-  const shapes = {
+  const shapes: Record<
+    "circle" | "hexagon" | "triangle" | "star",
+    JSX.Element
+  > = {
     circle: (
       <circle
         cx="50"
@@ -67,7 +71,7 @@ const DecorativeShape = ({
   return (
     <div className={`absolute pointer-events-none ${className}`}>
       <svg viewBox="0 0 100 100" className="w-full h-full fill-primary/10">
-        {shapes[type] || shapes.circle}
+        {shapes[type]}
       </svg>
     </div>
   );
@@ -255,7 +259,7 @@ export default function Home() {
 
           <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl tracking-tight leading-tight mb-6">
             <span className="block bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-              Empower Your Team real 
+              Empower Your Team real
             </span>
             <span className="block bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent mt-2">
               Time Features
@@ -286,7 +290,6 @@ export default function Home() {
               </Button>
             </Link>
           </div>
-
         </div>
       </div>
 
@@ -343,39 +346,6 @@ export default function Home() {
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
               </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 relative">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            Loved by Teams Worldwide
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                author: "Sarah Johnson",
-                role: "CTO at TechCorp",
-                content:
-                  "Connectify has transformed how our remote team collaborates. The video quality is outstanding, and the security features give us peace of mind.",
-              },
-              {
-                author: "Michael Chen",
-                role: "Product Manager",
-                content:
-                  "The best communication platform we've used. The interface is intuitive, and the features are exactly what modern teams need.",
-              },
-              {
-                author: "Emma Watson",
-                role: "Design Team Lead",
-                content:
-                  "We've seen a 40% increase in team productivity since switching to Connectify. The collaboration tools are game-changing.",
-              },
-            ].map((testimonial, index) => (
-              <Testimonial key={index} {...testimonial} />
             ))}
           </div>
         </div>

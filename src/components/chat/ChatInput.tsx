@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-
+import { GrSend } from "react-icons/gr";
 interface ChatInputProps {
   apiUrl: string;
   query: Record<string, any>;
@@ -85,18 +85,23 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                         </button>
                       </div>
                       <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center space-x-1">
-                        <div className="text-muted-foreground">
+                        <div className="text-muted-foreground mt-1">
                           <EmojiPicker
                             onChange={(emoji: string) =>
                               field.onChange(`${field.value} ${emoji}`)
                             }
                           />
                         </div>
-                        <Button type="submit" disabled={isLoading} size="icon" className="text-zinc-300">
+                        <Button
+                          type="submit"
+                          disabled={isLoading}
+                          size="icon"
+                          // className="text-zinc-200"
+                        >
                           {isLoading ? (
                             <Loader2 className="h-4 w-4 animate-spin " />
                           ) : (
-                            <Send className="h-4 w-4" />
+                            <GrSend className="h-4 w-4" />
                           )}
                         </Button>
                       </div>

@@ -45,6 +45,7 @@ import {
 } from "../ui/dropdown-menu";
 import { MemberRole } from "@prisma/client";
 import qs from "query-string";
+import { FaUsers } from "react-icons/fa";
 
 const roleIconMap = {
   GUEST: null,
@@ -112,7 +113,8 @@ const MembersModal = () => {
         `${
           response.data.removedMember?.profile?.name || "Member"
         } was successfully removed.`
-      ); 
+      );
+      onClose();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage =
@@ -131,7 +133,7 @@ const MembersModal = () => {
       <DialogContent className="bg-background overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center flex items-center justify-center gap-2">
-            <LinkIcon className="w-6 h-6 text-primary" />
+            <FaUsers className="w-6 h-6" />
             Manage Members
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">

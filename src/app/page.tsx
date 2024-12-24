@@ -77,7 +77,6 @@ const DecorativeShape = ({
   );
 };
 
-// Enhanced wave pattern with dynamic gradient and subtle animation
 const WavePattern = () => (
   <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-gray-950 overflow-hidden">
     <div
@@ -91,77 +90,6 @@ const WavePattern = () => (
   </div>
 );
 
-// Enhanced testimonial component with hover effects
-const Testimonial = ({
-  author,
-  role,
-  content,
-  rating,
-}: {
-  author: string;
-  role: string;
-  content: string;
-  rating: number;
-}) => (
-  <Card className="p-6 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50 hover:shadow-xl transition-all duration-300 group">
-    <div className="flex items-start gap-4">
-      <div className="rounded-full bg-primary/10 p-3 group-hover:bg-primary/20 transition-colors">
-        <Heart className="h-6 w-6 text-primary group-hover:scale-110 transition-transform" />
-      </div>
-      <div>
-        <div className="flex items-center gap-1 mb-2">
-          {[...Array(5)].map((_, i) => (
-            <svg
-              key={i}
-              className={`w-4 h-4 ${
-                i < rating ? "text-yellow-400" : "text-gray-300"
-              }`}
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          ))}
-        </div>
-        <p className="text-muted-foreground italic mb-4 line-clamp-4">
-          {content}
-        </p>
-        <div>
-          <p className="font-semibold">{author}</p>
-          <p className="text-sm text-muted-foreground">{role}</p>
-        </div>
-      </div>
-    </div>
-  </Card>
-);
-
-// New section: Integration showcase
-const IntegrationShowcase = () => (
-  <section className="py-20 relative overflow-hidden">
-    <div className="container mx-auto px-4">
-      <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-        Seamlessly Integrates with Your Workflow
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {[
-          { name: "Design Tools", icon: Brush },
-          { name: "Development", icon: Code },
-          { name: "Calendar", icon: Calendar },
-          { name: "Documents", icon: FileText },
-        ].map((integration, index) => (
-          <Card
-            key={index}
-            className="p-6 text-center group hover:shadow-lg transition-all duration-300 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50"
-          >
-            <integration.icon className="h-12 w-12 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
-            <h3 className="font-semibold">{integration.name}</h3>
-          </Card>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
 export default function Home() {
   const { isLoaded, isSignedIn } = useUser();
 
@@ -169,7 +97,6 @@ export default function Home() {
     <div className="relative min-h-screen overflow-hidden">
       <WavePattern />
 
-      {/* Enhanced decorative shapes with staggered animations */}
       <DecorativeShape
         className="top-40 left-0 w-72 h-72 blur-3xl"
         type="circle"
@@ -186,7 +113,7 @@ export default function Home() {
         delay="400"
       />
 
-      {/* Enhanced header with smooth transitions */}
+      {/*header with smooth transitions */}
       <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 group cursor-pointer">

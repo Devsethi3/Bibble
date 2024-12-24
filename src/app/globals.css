@@ -2,20 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+.container {
+  max-width: 1380px;
+  margin-inline: auto;
+  padding-inline: 0.75rem;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Light theme - Emerald */
+    --background: 0 0% 100%;
+    --foreground: 168 89% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 168 89% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 168 89% 4%;
+    --primary: 160 84% 39%;
+    --primary-foreground: 160 100% 97%;
+    --secondary: 160 70% 96%;
+    --secondary-foreground: 168 54% 12%;
+    --muted: 160 70% 96%;
+    --muted-foreground: 168 25% 46%;
+    --accent: 160 70% 96%;
+    --accent-foreground: 168 54% 12%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 160 100% 97%;
+    --border: 160 32% 91%;
+    --input: 160 32% 91%;
+    --ring: 160 84% 39%;
+    --radius: 0.5rem;
+    --chart-1: 160 84% 39%;
+    --chart-2: 160 70% 35%;
+    --chart-3: 160 50% 30%;
+    --chart-4: 160 30% 25%;
+    --chart-5: 160 20% 20%;
+  }
+
+  .dark {
+    /* Dark theme - Emerald */
+    --background: 168 89% 4%;
+    --foreground: 160 100% 97%;
+    --card: 168 89% 4%;
+    --card-foreground: 160 100% 97%;
+    --popover: 168 89% 4%;
+    --popover-foreground: 160 100% 97%;
+    --primary: 160 84% 49%;
+    --primary-foreground: 168 54% 12%;
+    --secondary: 168 50% 16%;
+    --secondary-foreground: 160 100% 97%;
+    --muted: 168 50% 16%;
+    --muted-foreground: 168 30% 65%;
+    --accent: 168 50% 16%;
+    --accent-foreground: 160 100% 97%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 160 100% 97%;
+    --border: 168 50% 16%;
+    --input: 168 50% 16%;
+    --ring: 160 76% 48%;
+    --chart-1: 160 84% 49%;
+    --chart-2: 160 70% 45%;
+    --chart-3: 160 50% 40%;
+    --chart-4: 160 30% 35%;
+    --chart-5: 160 20% 30%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Improve and enhance these css varibales for a emerald themed discord clone */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

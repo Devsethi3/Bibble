@@ -1,101 +1,391 @@
-import Image from "next/image";
+"use client";
+
+import React from "react";
+import Footer from "@/components/Footer";
+import PricingSection from "@/components/PricingSection";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { UserButton, useUser } from "@clerk/nextjs";
+import {
+  DownloadCloud,
+  Users,
+  Video,
+  Shield,
+  Loader2,
+  ChevronRight,
+  Sparkles,
+  Zap,
+  Lock,
+  Globe,
+  MessageSquare,
+  Heart,
+  Brush,
+  Code,
+  Calendar,
+  FileText,
+} from "lucide-react";
+import Link from "next/link";
+const DecorativeShape = ({
+  className,
+  type = "circle",
+  delay = "0",
+}: {
+  className: string;
+  type?: string;
+  delay?: string;
+}) => {
+  const shapes = {
+    circle: (
+      <circle
+        cx="50"
+        cy="50"
+        r="40"
+        className={`animate-pulse [animation-delay:${delay}ms]`}
+      />
+    ),
+    hexagon: (
+      <path
+        d="M50 10 L90 30 L90 70 L50 90 L10 70 L10 30 Z"
+        className={`animate-pulse [animation-delay:${delay}ms]`}
+      />
+    ),
+    triangle: (
+      <path
+        d="M50 10 L90 90 L10 90 Z"
+        className={`animate-pulse [animation-delay:${delay}ms]`}
+      />
+    ),
+    star: (
+      <path
+        d="M50 0 L61 35H97L68 57L79 91L50 70L21 91L32 57L3 35H39Z"
+        className={`animate-pulse [animation-delay:${delay}ms]`}
+      />
+    ),
+  };
+
+  return (
+    <div className={`absolute pointer-events-none ${className}`}>
+      <svg viewBox="0 0 100 100" className="w-full h-full fill-primary/10">
+        {shapes[type] || shapes.circle}
+      </svg>
+    </div>
+  );
+};
+
+// Enhanced wave pattern with dynamic gradient and subtle animation
+const WavePattern = () => (
+  <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-gray-950 overflow-hidden">
+    <div
+      className="absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] 
+      dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] 
+      [background-size:16px_16px] 
+      [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_70%,transparent_100%)]
+      animate-subtle-drift"
+    />
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5 dark:from-primary/10 dark:to-primary/10 animate-gradient-shift" />
+  </div>
+);
+
+// Enhanced testimonial component with hover effects
+const Testimonial = ({
+  author,
+  role,
+  content,
+  rating,
+}: {
+  author: string;
+  role: string;
+  content: string;
+  rating: number;
+}) => (
+  <Card className="p-6 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50 hover:shadow-xl transition-all duration-300 group">
+    <div className="flex items-start gap-4">
+      <div className="rounded-full bg-primary/10 p-3 group-hover:bg-primary/20 transition-colors">
+        <Heart className="h-6 w-6 text-primary group-hover:scale-110 transition-transform" />
+      </div>
+      <div>
+        <div className="flex items-center gap-1 mb-2">
+          {[...Array(5)].map((_, i) => (
+            <svg
+              key={i}
+              className={`w-4 h-4 ${
+                i < rating ? "text-yellow-400" : "text-gray-300"
+              }`}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+        <p className="text-muted-foreground italic mb-4 line-clamp-4">
+          {content}
+        </p>
+        <div>
+          <p className="font-semibold">{author}</p>
+          <p className="text-sm text-muted-foreground">{role}</p>
+        </div>
+      </div>
+    </div>
+  </Card>
+);
+
+// New section: Integration showcase
+const IntegrationShowcase = () => (
+  <section className="py-20 relative overflow-hidden">
+    <div className="container mx-auto px-4">
+      <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+        Seamlessly Integrates with Your Workflow
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {[
+          { name: "Design Tools", icon: Brush },
+          { name: "Development", icon: Code },
+          { name: "Calendar", icon: Calendar },
+          { name: "Documents", icon: FileText },
+        ].map((integration, index) => (
+          <Card
+            key={index}
+            className="p-6 text-center group hover:shadow-lg transition-all duration-300 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50"
+          >
+            <integration.icon className="h-12 w-12 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
+            <h3 className="font-semibold">{integration.name}</h3>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { isLoaded, isSignedIn } = useUser();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="relative min-h-screen overflow-hidden">
+      <WavePattern />
+
+      {/* Enhanced decorative shapes with staggered animations */}
+      <DecorativeShape
+        className="top-40 left-0 w-72 h-72 blur-3xl"
+        type="circle"
+        delay="0"
+      />
+      <DecorativeShape
+        className="top-20 right-0 w-96 h-96 blur-3xl"
+        type="hexagon"
+        delay="200"
+      />
+      <DecorativeShape
+        className="bottom-40 left-20 w-64 h-64 blur-3xl"
+        type="star"
+        delay="400"
+      />
+
+      {/* Enhanced header with smooth transitions */}
+      <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-2 group cursor-pointer">
+            <Sparkles className="h-6 w-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 text-primary" />
+            <span className="text-xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+              Innovate Hub
+            </span>
+          </div>
+
+          <nav className="hidden md:flex items-center gap-8">
+            {["Features", "Testimonials", "Integrations", "Pricing"].map(
+              (item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="relative text-sm font-medium transition-colors hover:text-primary group"
+                >
+                  {item}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                </a>
+              )
+            )}
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <ThemeSwitcher />
+            {!isLoaded ? (
+              <Loader2 className="animate-spin h-4 w-4 text-muted-foreground" />
+            ) : isSignedIn ? (
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox: "h-[34px] w-[34px]",
+                    userButtonPopoverFooter: "hidden",
+                  },
+                }}
+              />
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link href="/sign-in">
+                  <Button variant="ghost" className="font-medium">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button className="font-medium group">
+                    Start Free Trial
+                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </header>
+
+      {/* Enhanced Hero Section with better typography and animations */}
+      <div className="relative pt-32 pb-20 px-4 md:pt-40 md:pb-32">
+        <div className="container mx-auto text-center relative z-10">
+          <div className="flex justify-center mb-6">
+            <span
+              className="inline-flex items-center gap-2 text-sm border border-primary/20 py-1 px-4 rounded-full 
+        bg-primary/5 dark:bg-primary/10 text-primary animate-fade-in"
+            >
+              <Zap className="h-4 w-4 animate-pulse" />
+              Revolutionizing Team Collaboration
+            </span>
+          </div>
+
+          <h1 className="text-4xl font-extrabold sm:text-5xl lg:text-6xl tracking-tight leading-tight mb-6">
+            <span className="block bg-gradient-to-b from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              Empower Your Team real 
+            </span>
+            <span className="block bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent mt-2">
+              Time Features
+            </span>
+          </h1>
+
+          <p className="mt-6 md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Experience the future of team communication with crystal-clear video
+            calls, secure messaging, and powerful collaboration tools.
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
+            <Button
+              size="lg"
+              className="text-white shadow-lg shadow-primary/25 dark:shadow-primary/15 hover:scale-105 transition-all group"
+            >
+              <DownloadCloud className="mr-2 h-5 w-5 transition-transform group-hover:-translate-y-1" />
+              Start Free Trial
+            </Button>
+            <Link href="/demo">
+              <Button
+                variant="secondary"
+                size="lg"
+                className=" shadow-lg lg:w-fit w-full hover:scale-105 transition-all group"
+              >
+                Watch Demo
+                <Video className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Enhanced Features Section */}
+      <section id="features" className="py-20 bg-muted/50 relative">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            Powerful Features for Modern Teams
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Video,
+                title: "Crystal Clear Video",
+                description:
+                  "Experience unparalleled HD video quality with up to 25 participants. Perfect for team meetings, webinars, and virtual events.",
+              },
+              {
+                icon: Lock,
+                title: "Bank-Grade Security",
+                description:
+                  "Your privacy is our priority. Benefit from end-to-end encryption, two-factor authentication, and advanced threat protection.",
+              },
+              {
+                icon: Globe,
+                title: "Global Infrastructure",
+                description:
+                  "Connect from anywhere with our globally distributed network, ensuring low-latency and high-availability communication.",
+              },
+              {
+                icon: MessageSquare,
+                title: "Smart Messaging",
+                description:
+                  "Rich text formatting, file sharing, and thread organization make conversations more productive and organized.",
+              },
+              {
+                icon: Users,
+                title: "Team Collaboration",
+                description:
+                  "Create unlimited channels, share screens, and collaborate in real-time with integrated tools and plugins.",
+              },
+              {
+                icon: Shield,
+                title: "Advanced Controls",
+                description:
+                  "Comprehensive admin tools, usage analytics, and custom policies give you complete control over your workspace.",
+              },
+            ].map((feature, index) => (
+              <Card
+                key={index}
+                className="p-6 group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm bg-white/50 dark:bg-gray-900/50"
+              >
+                <feature.icon className="h-12 w-12 mb-4 text-primary transition-transform group-hover:scale-110" />
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20 relative">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            Loved by Teams Worldwide
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                author: "Sarah Johnson",
+                role: "CTO at TechCorp",
+                content:
+                  "Connectify has transformed how our remote team collaborates. The video quality is outstanding, and the security features give us peace of mind.",
+              },
+              {
+                author: "Michael Chen",
+                role: "Product Manager",
+                content:
+                  "The best communication platform we've used. The interface is intuitive, and the features are exactly what modern teams need.",
+              },
+              {
+                author: "Emma Watson",
+                role: "Design Team Lead",
+                content:
+                  "We've seen a 40% increase in team productivity since switching to Connectify. The collaboration tools are game-changing.",
+              },
+            ].map((testimonial, index) => (
+              <Testimonial key={index} {...testimonial} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <PricingSection />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

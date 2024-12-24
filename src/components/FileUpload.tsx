@@ -15,7 +15,7 @@ const FileUpload = ({ onChange, value, endPoint }: FileUploadProps) => {
 
   if (value && fileType && !["pdf"].includes(fileType)) {
     return (
-      <div className="relative h-20 w-20">
+      <div className="relative h-24 w-24 md:h-32 md:w-32">
         <Image
           fill
           src={value}
@@ -42,7 +42,7 @@ const FileUpload = ({ onChange, value, endPoint }: FileUploadProps) => {
           href={value}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
+          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline truncate"
         >
           {value.split("/").pop()}
         </a>
@@ -58,7 +58,7 @@ const FileUpload = ({ onChange, value, endPoint }: FileUploadProps) => {
   }
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md mx-auto">
       <div
         className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-8 transition-all duration-300 
       hover:border-primary bg-muted/5 dark:bg-muted/10 
@@ -74,20 +74,9 @@ const FileUpload = ({ onChange, value, endPoint }: FileUploadProps) => {
           onUploadError={(error: Error) => {
             console.error("Upload Error:", error);
           }}
-          className="w-full ut-label:text-primary ut-allowed-content:text-muted-foreground 
-          ut-button:bg-primary ut-button:hover:bg-primary/90 
-          ut-button:transition-colors ut-button:duration-300"
+          // todo : adding style
+          className="bg-slate-800 ut-label:text-lg ut-allowed-content:ut-uploading:text-red-300"
         />
-        <div className="mt-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            Drag and drop your file here or click to browse
-          </p>
-          <p className="text-xs text-muted-foreground/70 mt-1">
-            {endPoint === "messageFile"
-              ? "Support for images and PDFs up to 4MB"
-              : "Support for images up to 4MB"}
-          </p>
-        </div>
       </div>
     </div>
   );

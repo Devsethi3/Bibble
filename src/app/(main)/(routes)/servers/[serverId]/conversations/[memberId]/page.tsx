@@ -7,21 +7,15 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-interface MemberIdPageProps {
-  params: Promise<{
-    memberId: string;
-    serverId: string;
-  }>;
-  searchParams: {
-    video?: boolean;
-  };
+interface PageProps {
+  params: Promise<{ memberId: string; serverId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
-  const resolvedParams = await params;
-  const { memberId, serverId } = resolvedParams;
-
+const MemberIdPage = async ({ params, searchParams }: PageProps) => {
   const profile = await currentProfile();
+  const { memberId, serverId } = await params;
+  const resolvedSearchParams = await searchParams;
 
   if (!profile) {
     return redirect("/sign-in");
@@ -29,7 +23,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
 
   const currentMember = await db.member.findFirst({
     where: {
-      serverId: (await params).serverId,
+      serverId: serverId,
       profileId: profile.id,
     },
     include: {
@@ -49,11 +43,13 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
   if (!conversation) {
     return redirect(`/servers/${serverId}`);
   }
- 
+
   const { memberOne, memberTwo } = conversation;
 
   const otherMember =
     memberOne.profileId === profile.id ? memberTwo : memberOne;
+
+  const isVideo = resolvedSearchParams?.video === "true";
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-screen justify-between">
@@ -63,10 +59,10 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
         serverId={serverId}
         type="conversation"
       />
-      {searchParams.video && (
+      {isVideo && (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
-      {!searchParams.video && (
+      {!isVideo && (
         <div>
           <ChatMessages
             member={currentMember}

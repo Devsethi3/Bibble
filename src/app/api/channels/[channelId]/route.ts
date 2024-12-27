@@ -3,28 +3,22 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function DELETE(
-  req: Request,
-  context: { params: { channelId: string } }
-) {
+interface RouteContext {
+  params: Promise<{ channelId: string }>;
+}
+
+export async function DELETE(req: Request, { params }: RouteContext) {
   try {
-    const { params } = context; // Extract params from context
+    const { channelId } = await params;
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
-
     const serverId = searchParams.get("serverId");
 
-    if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    if (!serverId) {
+    if (!profile) return new NextResponse("Unauthorized", { status: 401 });
+    if (!serverId)
       return new NextResponse("Server ID missing", { status: 400 });
-    }
-
-    if (!params.channelId) {
+    if (!channelId)
       return new NextResponse("Channel ID missing", { status: 400 });
-    }
 
     const server = await db.server.update({
       where: {
@@ -41,7 +35,7 @@ export async function DELETE(
       data: {
         channels: {
           delete: {
-            id: params.channelId,
+            id: channelId,
             name: {
               not: "general",
             },
@@ -57,33 +51,21 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
-  req: Request,
-  context: { params: { channelId: string } }
-) {
+export async function PATCH(req: Request, { params }: RouteContext) {
   try {
-    const { params } = context; // Extract params from context
+    const { channelId } = await params;
     const profile = await currentProfile();
     const { name, type } = await req.json();
     const { searchParams } = new URL(req.url);
-
     const serverId = searchParams.get("serverId");
 
-    if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    if (!serverId) {
+    if (!profile) return new NextResponse("Unauthorized", { status: 401 });
+    if (!serverId)
       return new NextResponse("Server ID missing", { status: 400 });
-    }
-
-    if (!params.channelId) {
+    if (!channelId)
       return new NextResponse("Channel ID missing", { status: 400 });
-    }
-
-    if (name === "general") {
+    if (name === "general")
       return new NextResponse("Name cannot be 'general'", { status: 400 });
-    }
 
     const server = await db.server.update({
       where: {
@@ -101,7 +83,7 @@ export async function PATCH(
         channels: {
           update: {
             where: {
-              id: params.channelId,
+              id: channelId,
               NOT: {
                 name: "general",
               },

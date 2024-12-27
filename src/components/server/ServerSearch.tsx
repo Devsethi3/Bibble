@@ -53,6 +53,12 @@ const ServerSearch = ({ data }: ServerSearchProps) => {
     type: "channel" | "member";
   }) => {
     setOpen(false);
+
+    // Check if params is available and serverId is present
+    if (!params?.serverId) {
+      return; // You can handle this case, maybe show an error or fallback
+    }
+
     if (type === "member") {
       return router.push(`/servers/${params.serverId}/conversations/${id}`);
     }

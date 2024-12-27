@@ -2,10 +2,11 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { serverId: string } }
-) {
+interface RouteContext {
+  params: Promise<{ serverId: string }>;
+}
+
+export async function PATCH(req: Request, { params }: RouteContext) {
   try {
     const profile = await currentProfile();
     const { name, imageUrl } = await req.json();
@@ -14,9 +15,11 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Resolve params before using
+    const resolvedParams = await params;
     const server = await db.server.update({
       where: {
-        id: params.serverId,
+        id: resolvedParams.serverId,
         profileId: profile.id,
       },
       data: {
@@ -32,10 +35,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { serverId: string } }
-) {
+export async function DELETE(req: Request, { params }: RouteContext) {
   try {
     const profile = await currentProfile();
 
@@ -43,7 +43,9 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { serverId } = params;
+    // Resolve params before using
+    const resolvedParams = await params;
+    const { serverId } = resolvedParams;
 
     if (!serverId) {
       return new NextResponse("Server ID is required", { status: 400 });

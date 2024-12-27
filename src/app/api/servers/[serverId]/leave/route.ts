@@ -2,10 +2,11 @@ import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { serverId: string } }
-) {
+interface RouteContext {
+  params: Promise<{ serverId: string }>;
+}
+
+export async function PATCH(req: Request, { params }: RouteContext) {
   try {
     const profile = await currentProfile();
 
@@ -13,7 +14,9 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { serverId } = params;
+    // Resolve the params promise before using it
+    const resolvedParams = await params;
+    const { serverId } = resolvedParams;
 
     if (!serverId) {
       return new NextResponse("Server ID missing", { status: 400 });

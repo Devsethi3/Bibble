@@ -28,10 +28,10 @@ const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
     <Popover>
       <PopoverTrigger>
         <div
-          className="p-1.5 mr-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors duration-200"
+          className="p-1.5 mr-2 mt-0.5 rounded-md bg-primary/10 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors duration-200"
           title="Select Emoji"
         >
-          <Smile className="h-5 w-5 md:h-6 md:w-6 text-zinc-500 dark:text-zinc-400" />
+          <Smile className="h-5 w-5 md:h-6 md:w-6 text-zinc-700 hover:text-zinc-600 dark:text-zinc-300/60" />
         </div>
       </PopoverTrigger>
       <PopoverContent

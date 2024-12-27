@@ -3,27 +3,20 @@ import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { memberId: string } }
-) {
+interface RouteContext {
+  params: Promise<{ memberId: string }>;
+}
+
+export async function DELETE(req: Request, { params }: RouteContext) {
   try {
+    const { memberId } = await params;
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
     const serverId = searchParams.get("serverId");
 
-    // Input validation
-    if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    if (!serverId) {
-      return new NextResponse("Server ID missing", { status: 400 });
-    }
-
-    if (!params.memberId) {
-      return new NextResponse("Member ID missing", { status: 400 });
-    }
+    if (!profile) return new NextResponse("Unauthorized", { status: 401 });
+    if (!serverId) return new NextResponse("Server ID missing", { status: 400 });
+    if (!memberId) return new NextResponse("Member ID missing", { status: 400 });
 
     const server = await db.server.update({
       where: {
@@ -33,7 +26,7 @@ export async function DELETE(
       data: {
         members: {
           deleteMany: {
-            id: params.memberId,
+            id: memberId,
             profileId: {
               not: profile.id,
             },
@@ -63,29 +56,17 @@ const patchMemberSchema = z.object({
   role: z.enum(["GUEST", "MODERATOR", "ADMIN"]),
 });
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { memberId: string } }
-) {
+export async function PATCH(req: Request, { params }: RouteContext) {
   try {
+    const { memberId } = await params;
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
     const serverId = searchParams.get("serverId");
 
-    // Input validation
-    if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    if (!profile) return new NextResponse("Unauthorized", { status: 401 });
+    if (!serverId) return new NextResponse("Server ID missing", { status: 400 });
+    if (!memberId) return new NextResponse("Member ID missing", { status: 400 });
 
-    if (!serverId) {
-      return new NextResponse("Server ID missing", { status: 400 });
-    }
-
-    if (!params.memberId) {
-      return new NextResponse("Member ID missing", { status: 400 });
-    }
-
-    // Validate request body
     const body = await req.json();
     const validatedBody = patchMemberSchema.safeParse(body);
 
@@ -93,7 +74,6 @@ export async function PATCH(
       return new NextResponse("Invalid role", { status: 400 });
     }
 
-    // Check if user has permission to update roles
     const server = await db.server.findFirst({
       where: {
         id: serverId,
@@ -104,11 +84,8 @@ export async function PATCH(
       },
     });
 
-    if (!server) {
-      return new NextResponse("Server not found", { status: 404 });
-    }
+    if (!server) return new NextResponse("Server not found", { status: 404 });
 
-    // Update member role
     const updatedServer = await db.server.update({
       where: {
         id: serverId,
@@ -118,9 +95,9 @@ export async function PATCH(
         members: {
           update: {
             where: {
-              id: params.memberId,
+              id: memberId,
               profileId: {
-                not: profile.id, // Prevent self-role update
+                not: profile.id,
               },
             },
             data: {

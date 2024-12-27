@@ -34,18 +34,18 @@ const LeaveServerModal = () => {
       setIsLoading(true);
 
       const response = await axios.patch(`/api/servers/${server.id}/leave`);
-      
+
       if (response.status === 200) {
         // First close the modal
         onClose();
-        
+
         // Show success message
         toast.success("You have successfully left the server.");
-        
+
         try {
           // Fetch available servers
           const { data: servers } = await axios.get("/api/servers");
-          
+
           // Use setTimeout to ensure state updates have propagated
           setTimeout(() => {
             if (servers && servers.length > 0) {
@@ -56,15 +56,22 @@ const LeaveServerModal = () => {
             router.refresh();
           }, 100);
         } catch (error) {
-          // If fetching servers fails, redirect to get-started
+          console.log(error);
+          toast.error("Something went wrong!");
+
           router.push("/get-started");
           router.refresh();
         }
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data || "Failed to leave the server.";
-        toast.error(typeof errorMessage === 'string' ? errorMessage : "Failed to leave the server.");
+        const errorMessage =
+          error.response?.data || "Failed to leave the server.";
+        toast.error(
+          typeof errorMessage === "string"
+            ? errorMessage
+            : "Failed to leave the server."
+        );
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
@@ -94,11 +101,7 @@ const LeaveServerModal = () => {
         </DialogHeader>
         <DialogFooter className="px-6 py-4">
           <div className="flex items-center justify-between w-full">
-            <Button 
-              disabled={isLoading} 
-              onClick={onClose} 
-              variant="ghost"
-            >
+            <Button disabled={isLoading} onClick={onClose} variant="ghost">
               Cancel
             </Button>
             <Button

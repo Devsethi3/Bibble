@@ -1,5 +1,3 @@
-// use-modal-store.ts
-
 import { Channel, ChannelType, Server } from "@prisma/client";
 import { create } from "zustand";
 
@@ -21,7 +19,7 @@ interface ModalData {
   channel?: Channel;
   channelType?: ChannelType;
   apiUrl?: string;
-  query?: Record<string, any>;
+  query?: Record<string, string>;
 }
 
 interface ModalStore {

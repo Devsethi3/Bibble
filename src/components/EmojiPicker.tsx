@@ -11,6 +11,15 @@ interface EmojiPickerProps {
   onChange: (value: string) => void;
 }
 
+interface Emoji {
+  id: string;
+  name: string;
+  native: string;
+  unified: string;
+  keywords: string[];
+  shortcodes: string;
+}
+
 const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
   const { resolvedTheme } = useTheme();
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -35,7 +44,7 @@ const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
           <Picker
             theme={resolvedTheme}
             data={data}
-            onEmojiSelect={(emoji: any) => onChange(emoji.native)}
+            onEmojiSelect={(emoji: Emoji) => onChange(emoji.native)}
             previewPosition="none"
             skinTonePosition="none"
             perLine={isMobile ? 7 : 8}

@@ -9,14 +9,12 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { useParams, useRouter } from "next/navigation";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import qs from "query-string";
 
 const DeleteMessageModal = () => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type === "deleteMessage";

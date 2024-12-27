@@ -17,7 +17,6 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { ServerWithMemberWithProfiles } from "@/types";
 import { useModal } from "@/hooks/use-modal-store";
 

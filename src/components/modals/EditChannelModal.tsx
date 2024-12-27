@@ -24,7 +24,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useParams, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { ChannelType } from "@prisma/client";

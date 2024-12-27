@@ -4,12 +4,10 @@ import { useEffect, useRef, Fragment } from "react";
 import { Member, Message, Profile } from "@prisma/client";
 import { format } from "date-fns";
 import { Loader2, ServerCrash } from "lucide-react";
-import { useIntersection } from "@mantine/hooks";
 
 import ChatWelcome from "./ChatWelcome";
 import ChatItem from "./ChatItem";
 import { useChatQuery } from "@/hooks/use-chat-query";
-import { useChatSocket } from "@/hooks/use-chat-socket";
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -37,16 +35,9 @@ const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
-  const addKey = `chat:${chatId}:messages`;
-  const updateKey = `chat:${chatId}:messages:update`;
 
   const chatRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-
-  // Intersection observer for infinite scroll
-  const { ref: loadMoreRef, entry } = useIntersection({
-    threshold: 1,
-  });
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -55,12 +46,6 @@ const ChatMessages = ({
       paramKey,
       paramValue,
     });
-
-  const { isConnected } = useChatSocket({
-    queryKey,
-    addKey,
-    updateKey,
-  });
 
   // Scroll to bottom when messages change
   const scrollToBottom = () => {

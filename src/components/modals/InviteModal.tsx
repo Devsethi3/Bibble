@@ -36,6 +36,8 @@ const InviteModal = () => {
       toast.success("Invite link copied!");
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
+      console.log(error);
+
       toast.error("Failed to copy link. Please try manually selecting it.");
     }
   };

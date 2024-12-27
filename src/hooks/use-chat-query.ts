@@ -1,6 +1,5 @@
 import qs from "query-string";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSocket } from "@/providers/SocketProvider";
 import { Member, Message, Profile } from "@prisma/client";
 
 interface MessageWithMemberWithProfile extends Message {
@@ -27,7 +26,6 @@ export const useChatQuery = ({
   paramKey,
   paramValue,
 }: ChatQueryProps) => {
-  const { isConnected } = useSocket();
 
   const fetchMessages = async ({ pageParam }: { pageParam?: string }) => {
     const url = qs.stringifyUrl(

@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ServerWithMemberWithProfiles } from "@/types";
 import UserAvatar from "../UserAvatar";
 import {
@@ -69,6 +68,8 @@ const MembersModal = () => {
       onOpen("members", { server: response.data });
       toast.success(`Role updated to ${role.toLowerCase()}`);
     } catch (error) {
+      console.log(error);
+
       toast.error("Failed to update role");
     } finally {
       setLoadingId(null);
@@ -87,6 +88,7 @@ const MembersModal = () => {
       onOpen("members", { server: response.data });
       toast.success("Member removed");
     } catch (error) {
+      console.log(error);
       toast.error("Failed to remove member");
     } finally {
       setLoadingId(null);

@@ -59,11 +59,9 @@ const EditServerModal = () => {
   }, [server, form]);
 
   const isLoading = form.formState.isSubmitting;
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/servers/${server?.id}`, values);
-      const { id } = response.data;
+      await axios.patch(`/api/servers/${server?.id}`, values);
 
       toast.success("Server updated successfully! 🎉");
 

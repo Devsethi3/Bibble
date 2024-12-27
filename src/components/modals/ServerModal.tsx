@@ -54,9 +54,7 @@ const CreateServerModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/servers", values);
-
-      const { id } = response.data;
+      await axios.post("/api/servers", values);
 
       toast.success("Server created successfully! 🎉");
       form.reset();

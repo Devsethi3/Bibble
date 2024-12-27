@@ -58,18 +58,17 @@ const ChatItem = ({
   const router = useRouter();
   const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const handleKeydDown = (event: any) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" || event.keyCode === 27) {
         setIsEditing(false);
       }
     };
 
-    window.addEventListener("keydown", handleKeydDown);
+    window.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeydDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -101,9 +100,9 @@ const ChatItem = ({
     form.reset({
       content: content,
     });
-  }, [content]);
+  }, [content,form]);
 
-  const fileType = fileUrl?.split(".").pop();
+  // const fileType = fileUrl?.split(".").pop();
 
   const isAdmin = currentMember.role === MemberRole.ADMIN;
   const isModerator = currentMember.role === MemberRole.MODERATOR;

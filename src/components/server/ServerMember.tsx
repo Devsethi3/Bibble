@@ -18,7 +18,7 @@ const roleMapIcon = {
   [MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 text-destructive" />,
 };
 
-const ServerMember = ({ member, server }: ServerMemberProps) => {
+const ServerMember = ({ member }: ServerMemberProps) => {
   const params = useParams();
   const router = useRouter();
   const icon = roleMapIcon[member.role];

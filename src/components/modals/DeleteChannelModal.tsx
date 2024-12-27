@@ -9,7 +9,7 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { useParams, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";

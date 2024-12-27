@@ -14,14 +14,12 @@ import {
   Shield,
   Loader2,
   ChevronRight,
-  Sparkles,
   Zap,
   Lock,
   Globe,
   MessageSquare,
 } from "lucide-react";
 import Link from "next/link";
-import { AiFillAliwangwang } from "react-icons/ai";
 import { GiClover } from "react-icons/gi";
 
 const DecorativeShape = ({

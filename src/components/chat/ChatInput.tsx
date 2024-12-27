@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { Loader2, Paperclip, Send, Smile } from "lucide-react";
+import { Loader2, Paperclip } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import qs from "query-string";
@@ -15,9 +15,10 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { GrSend } from "react-icons/gr";
+
 interface ChatInputProps {
   apiUrl: string;
-  query: Record<string, any>;
+  query: Record<string, string>;
   name: string;
   type: "conversation" | "channel";
 }

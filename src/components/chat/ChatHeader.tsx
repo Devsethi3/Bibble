@@ -22,7 +22,7 @@ const ChatHeader = ({ serverId, name, type, imageUrl }: ChatHeaderPorps) => {
       {type === "conversation" && (
         <UserAvatar src={imageUrl} className="w-7 h-7 mr-2 md:h-7 md:w-7" />
       )}
-      <p className="font-semibold text-black dark:text-white">{name}</p>
+      <p className="font-semibold text-black line-clamp-1 dark:text-white">{name}</p>
       <div className="ml-auto flex items-center">
         {type === "conversation" && <ChatVideoButton />}
         <SocketIndicator />

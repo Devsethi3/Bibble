@@ -103,9 +103,9 @@ const MessageFileModal = () => {
                   />
                 </div>
               </div>
-              <DialogFooter className="bg-secondary px-6 py-4 rounded-b-lg">
+              <DialogFooter className="bg-secondary px-6 py-4 rounded-lg">
                 <Button
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary-dark flex items-center justify-center"
+                  className="w-full"
                   disabled={isLoading}
                 >
                   {isLoading ? (

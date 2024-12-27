@@ -201,16 +201,16 @@ export default function Home() {
               className="text-white shadow-lg shadow-primary/25 dark:shadow-primary/15 hover:scale-105 transition-all group"
             >
               <DownloadCloud className="mr-2 h-5 w-5 transition-transform group-hover:-translate-y-1" />
-              Start Free Trial
+              Download for windows
             </Button>
-            <Link href="/demo">
+            <Link href="/get-started">
               <Button
                 variant="secondary"
                 size="lg"
                 className=" shadow-lg lg:w-fit w-full hover:scale-105 transition-all group"
               >
-                Watch Demo
-                <Video className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                Open in Browser
+                <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>

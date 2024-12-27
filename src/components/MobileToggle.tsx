@@ -9,11 +9,11 @@ const MobileToggle = ({ serverId }: { serverId: string }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden mr-2">
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 flex gap-0">
+      <SheetContent side="left" className="p-0 flex gap-0 w-full">
         <DialogTitle className="sr-only">Mobile Navigation</DialogTitle>
         <div className="w-[72px]">  
           <NavigationSidebar />

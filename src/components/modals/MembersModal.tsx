@@ -1,7 +1,7 @@
 "use client";
 
 import { useModal } from "@/hooks/use-modal-store";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,14 +9,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../ui/dialog";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import {
   Check,
-  Copy,
-  RefreshCcw,
-  Link as LinkIcon,
   ShieldCheck,
   ShieldAlert,
   MoreVertical,
@@ -24,11 +20,10 @@ import {
   Shield,
   Gavel,
   Loader2,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Label } from "../ui/label";
-import { useOrigin } from "@/hooks/use-origin";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ServerWithMemberWithProfiles } from "@/types";
 import UserAvatar from "../UserAvatar";
@@ -46,11 +41,13 @@ import {
 import { MemberRole } from "@prisma/client";
 import qs from "query-string";
 import { FaUsers } from "react-icons/fa";
+import { format } from "date-fns";
 
+const DATE_FORMAT = "d MMM yyyy";
 const roleIconMap = {
-  GUEST: null,
-  MODERATOR: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
-  ADMIN: <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />,
+  GUEST: <Shield className="h-4 w-4 text-gray-500" />,
+  MODERATOR: <ShieldCheck className="h-4 w-4 text-indigo-500" />,
+  ADMIN: <ShieldAlert className="h-4 w-4 text-rose-500" />,
 };
 
 const MembersModal = () => {
@@ -58,37 +55,21 @@ const MembersModal = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const { isOpen, onClose, type, data, onOpen } = useModal();
   const isModalOpen = isOpen && type === "members";
-
   const { server } = data as { server: ServerWithMemberWithProfiles };
 
   const onRoleChange = async (memberId: string, role: MemberRole) => {
     try {
       setLoadingId(memberId);
-
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
-        query: {
-          serverId: server?.id,
-        },
+        query: { serverId: server?.id },
       });
-
       const response = await axios.patch(url, { role });
       router.refresh();
       onOpen("members", { server: response.data });
-
-      toast.success(
-        `${
-          response.data.updatedMember?.profile?.name || "Member"
-        }'s role updated to ${role}.`
-      );
+      toast.success(`Role updated to ${role.toLowerCase()}`);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message || "An error occurred.";
-        toast.error(`Failed to update role: ${errorMessage}`);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+      toast.error("Failed to update role");
     } finally {
       setLoadingId(null);
     }
@@ -97,32 +78,16 @@ const MembersModal = () => {
   const onKick = async (memberId: string) => {
     try {
       setLoadingId(memberId);
-
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
-        query: {
-          serverId: server?.id,
-        },
+        query: { serverId: server?.id },
       });
-
       const response = await axios.delete(url);
       router.refresh();
       onOpen("members", { server: response.data });
-
-      toast.success(
-        `${
-          response.data.removedMember?.profile?.name || "Member"
-        } was successfully removed.`
-      );
-      onClose();
+      toast.success("Member removed");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to remove the member.";
-        toast.error(`Error: ${errorMessage}`);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
+      toast.error("Failed to remove member");
     } finally {
       setLoadingId(null);
     }
@@ -130,85 +95,145 @@ const MembersModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-background overflow-hidden">
-        <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center flex items-center justify-center gap-2">
-            <FaUsers className="w-6 h-6" />
+      <DialogContent className="bg-background overflow-x-auto max-w-2xl sm:max-w-lg md:max-w-xl lg:max-w-2xl w-full p-0 gap-0">
+        <DialogHeader className="p-6 border-b">
+          <DialogTitle className="text-xl font-semibold flex items-center justify-center gap-2">
+            <FaUsers className="w-5 h-5" />
             Manage Members
           </DialogTitle>
-          <DialogDescription className="text-center text-muted-foreground">
-            {server?.members?.length} Members
+          <DialogDescription className="text-center text-sm">
+            {server?.members?.length}{" "}
+            {server?.members?.length === 1 ? "Member" : "Members"}
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="mt-8 max-h-[420px] pr-6">
-          {server?.members.map((member) => (
-            <div key={member.id} className="flex items-center gap-x-2 mb-6">
-              <UserAvatar src={member.profile.imageUrl} />
-              <div className="flex flex-col gap-y-1">
-                <div className="text-sm font-medium flex items-center gap-x-1">
-                  {member.profile.name}
-                  {roleIconMap[member.role]}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {member.profile.email}
-                </p>
-              </div>
-              {server.profileId !== member.profileId &&
-                loadingId !== member.id && (
-                  <div className="ml-auto">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <MoreVertical className="h-4 w-4 text-muted-foreground" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent side="left">
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger className="flex items-center">
-                            <ShieldQuestion className="h-4 w-4 mr-2" />
-                            <span>Role</span>
-                          </DropdownMenuSubTrigger>
-                          <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                              <DropdownMenuItem
-                                onClick={() => onRoleChange(member.id, "GUEST")}
+
+        <div className="p-4">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-xs font-semibold text-muted-foreground text-left py-2 px-4 w-12"></th>
+                  <th className="text-xs font-semibold text-muted-foreground text-left py-2 px-4">
+                    User
+                  </th>
+                  <th className="text-xs font-semibold text-muted-foreground text-left py-2 px-4">
+                    Role
+                  </th>
+                  <th className="text-xs font-semibold text-muted-foreground text-left py-2 px-4">
+                    Joined
+                  </th>
+                  <th className="text-xs font-semibold text-muted-foreground text-right py-2 px-4">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {server?.members.map((member) => (
+                  <tr key={member.id} className="hover:bg-muted/50">
+                    <td className="p-4">
+                      <UserAvatar
+                        src={member.profile.imageUrl}
+                        className="h-8 w-8"
+                      />
+                    </td>
+                    <td className="p-4">
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                          {member.profile.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {member.profile.email}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-x-2">
+                        {roleIconMap[member.role]}
+                        <span className="text-sm">
+                          {member.role.toLowerCase()}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <Clock className="w-3 h-3 mr-1" />
+                        {format(new Date(member.createdAt), DATE_FORMAT)}{" "}
+                      </div>
+                    </td>
+                    <td className="p-4 text-right">
+                      {server.profileId !== member.profileId ? (
+                        loadingId === member.id ? (
+                          <Loader2 className="animate-spin ml-auto w-4 h-4" />
+                        ) : (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8"
                               >
-                                <Shield className="h-4 w-4 mr-2" />
-                                Guest
-                                {member.role === "GUEST" && (
-                                  <Check className="h-4 w-4 ml-auto" />
-                                )}
-                              </DropdownMenuItem>
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-36">
+                              <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                  <ShieldQuestion className="h-4 w-4 mr-2" />
+                                  Role
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuPortal>
+                                  <DropdownMenuSubContent>
+                                    {Object.entries(roleIconMap).map(
+                                      ([role, icon]) => (
+                                        <DropdownMenuItem
+                                          key={role}
+                                          onClick={() =>
+                                            onRoleChange(
+                                              member.id,
+                                              role as MemberRole
+                                            )
+                                          }
+                                          className="flex items-center"
+                                        >
+                                          {React.cloneElement(icon, {
+                                            className: "h-4 w-4 mr-2",
+                                          })}
+                                          <span>
+                                            {role.charAt(0) +
+                                              role.slice(1).toLowerCase()}
+                                          </span>
+                                          {member.role === role && (
+                                            <Check className="h-4 w-4 ml-auto" />
+                                          )}
+                                        </DropdownMenuItem>
+                                      )
+                                    )}
+                                  </DropdownMenuSubContent>
+                                </DropdownMenuPortal>
+                              </DropdownMenuSub>
+                              <DropdownMenuSeparator />
                               <DropdownMenuItem
-                                onClick={() =>
-                                  onRoleChange(member.id, "MODERATOR")
-                                }
+                                onClick={() => onKick(member.id)}
+                                className="text-rose-500"
                               >
-                                <ShieldCheck className="h-4 w-4 mr-2" />
-                                Moderator
-                                {member.role === "MODERATOR" && (
-                                  <Check className="h-4 w-4 ml-auto" />
-                                )}
+                                <Gavel className="h-4 w-4 mr-2" />
+                                Kick
                               </DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                          </DropdownMenuPortal>
-                        </DropdownMenuSub>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => onKick(member.id)}>
-                          <Gavel className="w-4 h-4 mr-2" />
-                          Kick
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                )}
-              {loadingId === member.id && (
-                <Loader2 className="animate-spin text-muted-foreground ml-auto w-4 h-4" />
-              )}
-            </div>
-          ))}
-        </ScrollArea>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
 };
 
 export default MembersModal;
+// Make it responsive for all screen size device

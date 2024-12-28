@@ -4,8 +4,9 @@ FROM node:18
 # Create app directory
 WORKDIR /app
 
-# Copy package files first
+# Copy package files and prisma schema first
 COPY package*.json ./
+COPY prisma ./prisma/
 
 # Install dependencies
 RUN npm ci

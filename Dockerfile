@@ -16,6 +16,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
 RUN npm run build
+RUN npm install --legacy-peer-deps
 
 # Runner stage
 FROM base AS runner

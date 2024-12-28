@@ -1,21 +1,35 @@
-# Use Node.js image
-FROM node:18-alpine
-# Set working directory
+# Base stage
+FROM node:18-alpine AS base
 WORKDIR /app
-# Install prisma globally to ensure it's available
-RUN npm install -g prisma
-# Copy package files and prisma schema
-COPY package*.json ./
+
+# Dependencies stage
+FROM base AS deps
+# Add necessary alpine packages for node-gyp
+RUN apk add --no-cache libc6-compat
+COPY package.json package-lock.json ./
 COPY prisma ./prisma/
-# Install dependencies
 RUN npm ci
-# Copy the rest of the application
+
+# Builder stage
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Generate Prisma client
 RUN npx prisma generate
-# Build the application
 RUN npm run build
-# Expose port
+
+# Runner stage
+FROM base AS runner
+ENV NODE_ENV production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+ENV PORT 3000
 EXPOSE 3000
-# Start command for Next.js
-CMD ["npm", "start"]
+
+CMD ["node", "server.js"]

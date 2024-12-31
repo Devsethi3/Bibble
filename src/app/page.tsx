@@ -160,7 +160,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Enhanced Hero Section with better typography and animations */}
+      {/* Enhanced Hero Section with better typography and  */}
       <div className="relative pt-32 pb-20 px-4 md:pt-40 md:pb-32">
         <div className="container mx-auto text-center relative z-10">
           <div className="flex justify-center mb-6">

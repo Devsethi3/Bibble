@@ -49,7 +49,7 @@ const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
             skinTonePosition="none"
             perLine={isMobile ? 7 : 8}
             maxFrequentRows={isMobile ? 2 : 3}
-            // navPosition={isMobile ? }
+            // navPosition={isMobile }
             emojiSize={isMobile ? 22 : 24}
             emojiButtonSize={isMobile ? 28 : 32}
           />

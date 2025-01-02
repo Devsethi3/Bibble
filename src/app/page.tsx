@@ -108,7 +108,7 @@ export default function Home() {
         delay="400"
       />
 
-      {/*header with smooth */}
+      {/*header with */}
       <header className="fixed top-0 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 group cursor-pointer">

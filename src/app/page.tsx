@@ -207,7 +207,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Enhanced Features  */}
+      {/* Enhanced */}
       <section id="features" className="py-20 bg-muted/50 relative">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">

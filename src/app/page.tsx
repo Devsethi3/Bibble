@@ -264,7 +264,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* */}
       <PricingSection />
 
       {/* Footer */}

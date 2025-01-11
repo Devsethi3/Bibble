@@ -36,7 +36,7 @@ const DeleteServerModal = () => {
       const response = await axios.delete(`/api/servers/${server.id}`);
 
       if (response.status === 200) {
-        // First close the modal
+        // First close the
         onClose();
 
         // Show success message

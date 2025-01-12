@@ -38,7 +38,6 @@ const DeleteServerModal = () => {
       if (response.status === 200) {
         onClose();
 
-        //
         toast.success(
           `The server "${server.name}" has been successfully deleted.`
         );

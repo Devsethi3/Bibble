@@ -43,7 +43,7 @@ const DeleteServerModal = () => {
         );
 
         try {
-          //
+          
           const { data: servers } = await axios.get("/api/servers");
 
           // Use setTimeout to ensure state updates have propagated

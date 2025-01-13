@@ -46,7 +46,7 @@ const DeleteServerModal = () => {
           
           const { data: servers } = await axios.get("/api/servers");
 
-          // Use setTimeout to ensure state updates
+          // Use setTimeout to ensure state
           setTimeout(() => {
             if (servers && servers.length > 0) {
               router.push(`/servers/${servers[0].id}`);

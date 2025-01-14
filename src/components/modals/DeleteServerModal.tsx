@@ -58,7 +58,7 @@ const DeleteServerModal = () => {
           console.log(error);
           toast.error("Something went wrong!")
 
-          // If fetching servers fails, redirect to get-started
+          // If fetching servers fails, redirect to get
           setTimeout(() => {
             router.push("/get-started");
             router.refresh();

@@ -27,7 +27,7 @@ const NavigationSidebar = async () => {
     <div className="space-y-4 flex flex-col items-center h-full text-primary w-full bg-zinc-100 dark:bg-zinc-800 py-3">
       <NavigationAction />
 
-      {/* Separator */}
+      {/* */}
       <Separator className="h-[2px] bg-muted dark:bg-muted-foreground rounded-md w-10 mx-auto" />
 
       {/* Scrollable Area */}

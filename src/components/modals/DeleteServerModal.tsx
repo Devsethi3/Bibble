@@ -58,7 +58,6 @@ const DeleteServerModal = () => {
           console.log(error);
           toast.error("Something went wrong!")
 
-          //
           setTimeout(() => {
             router.push("/get-started");
             router.refresh();

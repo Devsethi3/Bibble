@@ -29,7 +29,6 @@ const NavigationSidebar = async () => {
 
       <Separator className="h-[2px] bg-muted dark:bg-muted-foreground rounded-md w-10 mx-auto" />
 
-      {/* */}
       <ScrollArea className="flex-1 w-full">
         {servers.map((server) => (
           <div key={server.id} className="mb-16">

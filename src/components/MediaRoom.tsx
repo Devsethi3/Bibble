@@ -21,7 +21,7 @@ const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
 
     const name = `${user.firstName} ${user?.lastName}`;
 
-    // Define and immediately invoke the async
+    // Define and immediately invoke the
     (async () => {
       try {
         const resp = await fetch(
